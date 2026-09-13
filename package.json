@@ -34,9 +34,6 @@
     "tsx": "4.20.3",
     "typescript": "5.6.3"
   },
-  "overrides": {
-    "motion-dom": "12.23.12"
-  },
   "dependencies": {
     "@auth/prisma-adapter": "2.11.3",
     "@aws-sdk/client-s3": "3.1105.0",
@@ -87,7 +84,7 @@
     "dotenv": "16.5.0",
     "embla-carousel-react": "8.3.0",
     "formik": "2.4.5",
-    "framer-motion": "12.23.12",
+    "framer-motion": "^12.23.22",
     "gray-matter": "4.0.3",
     "input-otp": "1.2.4",
     "jotai": "2.10.0",
