@@ -52,10 +52,10 @@ Crie um arquivo `.env` na raiz do projeto com as variáveis utilizadas pela apli
 
 ```env
 DATABASE_URL=
-AWS_PROFILE
-AWS_REGION
-AWS_BUCKET_NAME
-AWS_FOLDER_PREFIX
+AWS_PROFILE=
+AWS_REGION=
+AWS_BUCKET_NAME=
+AWS_FOLDER_PREFIX=
 NEXTAUTH_SECRET=
 AUTH_SECRET=
 ```
