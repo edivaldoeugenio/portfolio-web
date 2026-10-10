@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { auth } from '@/auth'
+import { getPublicCatalogData } from '@/lib/public-catalog'
 
 export async function GET(req: NextRequest) {
   try {
@@ -9,21 +10,25 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get('category')
     const search = searchParams.get('search')
     const featured = searchParams.get('featured')
-    const all = searchParams.get('all') // admin mode - include inactive
+    const all = searchParams.get('all')
 
-    const where: any = {}
-    if (!all) where.active = true
-    if (category) where.category = category
-    if (featured === 'true') where.featured = true
+    const { products, source, reason } = await getPublicCatalogData(Boolean(all))
+
+    let filtered = [...products]
+
+    if (category) filtered = filtered.filter((p) => p.category === category)
+    if (featured === 'true') filtered = filtered.filter((p) => p.featured)
     if (search) {
-      where.name = { contains: search, mode: 'insensitive' }
+      const q = search.toLowerCase()
+      filtered = filtered.filter((p) => p.name.toLowerCase().includes(q))
     }
 
-    const products = await prisma.product.findMany({
-      where,
-      orderBy: { sortOrder: 'asc' },
+    return NextResponse.json(filtered, {
+      headers: {
+        'x-data-source': source,
+        ...(reason ? { 'x-fallback-reason': reason } : {}),
+      },
     })
-    return NextResponse.json(products)
   } catch (error: any) {
     return NextResponse.json({ error: 'Erro ao buscar produtos' }, { status: 500 })
   }
